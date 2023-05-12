@@ -25,6 +25,7 @@ app.post("/create-payment-intent", async (req, res) => {
     // });
 
     // console.log(paymentIntent.client_secret)
+    console.log(req.body)
 
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -32,18 +33,18 @@ app.post("/create-payment-intent", async (req, res) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'T-shirt',
+              name: req.body.Name,
             },
-            unit_amount: 2000,
+            unit_amount: req.body.Price*100,
           },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: 'http://localhost:4242/success',
-      cancel_url: 'http://localhost:4242/cancel',
+      success_url: 'http://localhost:3000/success',
+      cancel_url: 'http://localhost:3000/cancel',
     });
-  
+  console.log(session.url)
     res.status(200).json(session.url);
 
   } catch (error) {
